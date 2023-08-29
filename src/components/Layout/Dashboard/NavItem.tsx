@@ -1,12 +1,10 @@
-import { useState } from 'react';
 import { Box, ButtonBase, Collapse } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
-import { useAppDispatch } from 'store/hooks';
-import { uiAction } from 'store/slice/Ui';
+import useUIStore from 'store/useUIStore';
 
 interface SideNavItemProps {
   currentPath: string;
@@ -21,23 +19,19 @@ interface SideNavItemProps {
   }[];
 }
 export const SideNavItem = (props: SideNavItemProps) => {
-  const { currentPath, child, Icon, path, title, expandMenuList, openSidebar } =
-    props;
+  const { currentPath, child, Icon, path, title, expandMenuList, openSidebar } = props;
   const open = openSidebar;
   const active = currentPath.includes(path);
-
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const uiStore = useUIStore();
 
   const clickExpand = (values: string) => {
     const isOpen = expandMenuList.includes(values);
 
     if (isOpen) {
-      dispatch(
-        uiAction.expandSideBar(expandMenuList.filter((val) => val !== values)),
-      );
+      uiStore.expandSideBar(expandMenuList.filter((val) => val !== values));
     } else {
-      dispatch(uiAction.expandSideBar([...expandMenuList, values]));
+      uiStore.expandSideBar([...expandMenuList, values]);
     }
   };
 

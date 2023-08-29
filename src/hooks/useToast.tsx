@@ -1,26 +1,24 @@
 import { ToastProsp } from 'components/Toast';
-
-import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { uiAction } from 'store/slice/Ui';
+import useUIStore from 'store/useUIStore';
 
 export default function useToast() {
-  const dispatch = useAppDispatch();
-  const toast = useAppSelector((state) => state.ui.toast);
+  const { toast, openToast, clearToast, closeToast } = useUIStore((state) => state);
 
-  const openToast = (params: ToastProsp) => {
-    dispatch(uiAction.openToast(params));
+  const HandleOpenToast = (params: ToastProsp) => {
+    openToast(params);
   };
 
-  const closeToast = () => {
-    dispatch(uiAction.closeToast());
+  const HandlecloseToast = () => {
+    closeToast();
     setTimeout(() => {
-      dispatch(uiAction.clearToast());
+      clearToast();
     }, 100);
   };
 
   return {
     state: toast,
-    openToast,
-    closeToast,
+    openToast: HandleOpenToast,
+    closeToast: HandlecloseToast,
   };
 }

@@ -13,11 +13,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import LogoBlue from 'assets/logo/blue.png';
 import bgGradient from 'assets/img/gradient-bg.svg';
-import { useAppDispatch } from 'store/hooks';
 import { authAction } from 'store/slice/Auth';
 
 export default function Login() {
-  const dispatch = useAppDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -31,14 +29,7 @@ export default function Login() {
       password: Yup.string().min(8).required('Password is required'),
     }),
     onSubmit: async (value) => {
-      // dispatch(
-      //   uiAction.openToast({
-      //     headMsg: `Welcome `,
-      //     message: 'login success',
-      //     severity: 'success',
-      //   }),
-      // );
-      dispatch(authAction.postLogin(value));
+
     },
   });
 
@@ -50,7 +41,7 @@ export default function Login() {
         height: '100vh',
         display: 'flex',
         justifyContent: 'center',
-        background: 'linear-gradient(-45deg,#405189 50%,#0ab39c)',
+        background: 'linear-gradient(-45deg,#FEC81D 40%,#fe591d)',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center top',
         // backgroundImage: `url(${bgGradient})`,

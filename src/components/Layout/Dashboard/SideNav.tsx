@@ -11,13 +11,12 @@ import {
 } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import Logo from 'components/Logo';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { uiAction } from 'store/slice/Ui';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { items } from './config';
 import { SideNavItem } from './NavItem';
 import LogoBlue from 'assets/logo/blue.png';
+import useUIStore from 'store/useUIStore';
 
 interface SideNavProps {
   open: boolean;
@@ -29,9 +28,8 @@ export const SideNav = (props: SideNavProps) => {
   const theme = useTheme();
   const { open, handleDrawer, drawerWidthOpen } = props;
   const { pathname } = useLocation();
-  const dispatch = useAppDispatch();
-  const expandMenuList = useAppSelector((state) => state.ui.sideBarExpand);
-  const sideBarFixed = useAppSelector((state) => state.ui.sideBarFixed);
+  const expandMenuList = useUIStore((state) => state.sideBarExpand);
+  const { sideBarFixed, fixedSideBar } = useUIStore((state) => state);
   const lgUp = useMediaQuery((themeState: any) => themeState.breakpoints.up('lg'));
 
   const paddingIconButton = 10;
@@ -81,21 +79,16 @@ export const SideNav = (props: SideNavProps) => {
               display: 'inline-flex',
               bgcolor: 'white',
               p: 1,
-              borderRadius: '4px'
+              borderRadius: '4px',
             }}
           >
-            <Box
-              component="img"
-              src={LogoBlue}
-              alt="image"
-              sx={{ width: 37, height: 'auto' }}
-            />
+            <Box component="img" src={LogoBlue} alt="image" sx={{ width: 37, height: 'auto' }} />
           </Box>
           <IconButton
             sx={{ display: open ? 'block' : 'none', color: 'white' }}
             size="small"
             onClick={() => {
-              dispatch(uiAction.fixedSideBar(!sideBarFixed));
+              fixedSideBar(!sideBarFixed);
             }}
           >
             {sideBarFixed ? <MenuOpenIcon /> : <ArrowForwardIcon />}

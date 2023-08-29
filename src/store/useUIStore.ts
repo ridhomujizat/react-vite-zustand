@@ -2,7 +2,7 @@ import { ToastProsp } from 'components/Toast';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-interface UIState {
+interface UIStateType {
   toast: ToastProsp;
   sideBarExpand: string[];
   sideBarFixed: boolean;
@@ -10,7 +10,15 @@ interface UIState {
   navigateChangedCount: number;
 }
 
-const initialState: UIState = {
+interface UIStoreType extends UIStateType {
+  openToast: (value: ToastProsp) => void;
+  clearToast: () => void;
+  closeToast: () => void;
+  expandSideBar: (value: string[]) => void;
+  fixedSideBar: (value: boolean) => void;
+}
+
+const initialState: UIStateType = {
   toast: {
     open: false,
     duration: 3000,
@@ -26,7 +34,24 @@ const initialState: UIState = {
 };
 
 const useUIStore = create(
-  devtools((set) => ({
+  devtools<UIStoreType>((set) => ({
     ...initialState,
+    openToast: (value) => {
+      set((state) => ({ toast: { ...state.toast, ...value } }));
+    },
+    clearToast: () => {
+      set((state) => ({ toast: initialState.toast }));
+    },
+    closeToast: () => {
+      set((state) => ({ toast: { open: false, ...state.toast } }));
+    },
+    expandSideBar: (value) => {
+      set({ sideBarExpand: value });
+    },
+    fixedSideBar: (value) => {
+      set({ sideBarFixed: value });
+    },
   }))
 );
+
+export default useUIStore;

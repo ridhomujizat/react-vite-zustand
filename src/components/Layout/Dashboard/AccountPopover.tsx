@@ -1,15 +1,8 @@
 import { useCallback } from 'react';
-import {
-  Box,
-  Divider,
-  MenuItem,
-  MenuList,
-  Popover,
-  Typography,
-} from '@mui/material';
+import { Box, Divider, MenuItem, MenuList, Popover, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { authAction } from 'store/slice/Auth';
-import { useAppSelector, useAppDispatch } from 'store/hooks';
+import useAuthStore from 'store/useAuthStore';
 
 interface AccountPoporver {
   anchorEl: any;
@@ -19,15 +12,13 @@ interface AccountPoporver {
 
 export const AccountPopover = (props: AccountPoporver) => {
   const { anchorEl, onClose, open } = props;
-  const dispatch = useAppDispatch();
-  const userStore = useAppSelector((state) => state.auth.User);
+  const { User, postLogout } = useAuthStore();
   const navigate = useNavigate();
+
   const handleSignOut = useCallback(() => {
     onClose?.();
     navigate('/login');
-    dispatch(authAction.postLogout());
-    // auth.signOut();
-    // router.push('/auth/login');
+    postLogout()
   }, [onClose]);
 
   return (
@@ -49,7 +40,7 @@ export const AccountPopover = (props: AccountPoporver) => {
       >
         <Typography variant="overline">Account</Typography>
         <Typography color="text.secondary" variant="body2">
-          {userStore?.UserInformation.fullName}
+          {User?.UserInformation.fullName}
         </Typography>
       </Box>
       <Divider />

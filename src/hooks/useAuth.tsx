@@ -1,9 +1,9 @@
-import { useAppSelector } from 'store/hooks';
 import { useEffect, useState } from 'react';
 import { getLogin } from 'utils/sessions';
+import useAuthStore from 'store/useAuthStore'
 
 export default function UseAuth() {
-  const user = useAppSelector((state) => state.auth.User);
+  const user = useAuthStore((state) => state.User);
   const [auth, setAuth] = useState(getLogin());
 
   useEffect(() => {
