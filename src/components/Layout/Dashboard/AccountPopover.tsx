@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { Box, Divider, MenuItem, MenuList, Popover, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { authAction } from 'store/slice/Auth';
 import useAuthStore from 'store/useAuthStore';
+import { removeLogin } from 'utils/sessions';
 
 interface AccountPoporver {
   anchorEl: any;
@@ -17,8 +17,9 @@ export const AccountPopover = (props: AccountPoporver) => {
 
   const handleSignOut = useCallback(() => {
     onClose?.();
-    navigate('/login');
     postLogout()
+    removeLogin()
+    window.location.href = '/login'
   }, [onClose]);
 
   return (

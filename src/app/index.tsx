@@ -8,14 +8,6 @@ import useAuthStore from 'store/useAuthStore';
 import { getLogin } from 'utils/sessions';
 import http from 'utils/request';
 
-import { BrowserRouter } from 'react-router-dom';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-
-import Theme from 'theme';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-
 import ErrorBoundary from './ErrorBoundary';
 import Router from './Router';
 

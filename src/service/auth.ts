@@ -1,10 +1,10 @@
 import http from 'utils/request';
-import { PostLogin } from 'models';
+import { Respons, PostLogin, Login } from 'models';
 // import { RoleAccessParams } from "models/RoleAccess";
 // import { CreateRoleUserPayload } from "models/RoleUser";
 
 export const postLogin = (payload: PostLogin) =>
-  new Promise<PostLogin>(async (resolve, reject) => {
+  new Promise<Respons<Login>>(async (resolve, reject) => {
     try {
       const respon = await http.post(`/api/auth/login`, payload);
       if (respon.data) {

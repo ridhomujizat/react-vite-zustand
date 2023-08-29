@@ -1,5 +1,4 @@
 import { ToastProsp } from 'components/Toast';
-import { uiAction } from 'store/slice/Ui';
 import useUIStore from 'store/useUIStore';
 
 export default function useToast() {

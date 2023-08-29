@@ -37,13 +37,13 @@ const useUIStore = create(
   devtools<UIStoreType>((set) => ({
     ...initialState,
     openToast: (value) => {
-      set((state) => ({ toast: { ...state.toast, ...value } }));
+      set((state) => ({ toast: { ...state.toast, open: true, ...value } }));
     },
     clearToast: () => {
       set((state) => ({ toast: initialState.toast }));
     },
     closeToast: () => {
-      set((state) => ({ toast: { open: false, ...state.toast } }));
+      set((state) => ({ toast: { ...state.toast,  open: false, } }));
     },
     expandSideBar: (value) => {
       set({ sideBarExpand: value });

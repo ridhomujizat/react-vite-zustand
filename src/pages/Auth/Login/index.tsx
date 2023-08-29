@@ -1,21 +1,22 @@
 import React from 'react';
-import {
-  Box,
-  Stack,
-  Link,
-  Typography,
-  Button,
-  TextField,
-  Card,
-  CardContent,
-} from '@mui/material';
+import { Box, Stack, Link, Typography, Button, TextField, Card, CardContent } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import LogoBlue from 'assets/logo/blue.png';
 import bgGradient from 'assets/img/gradient-bg.svg';
-import { authAction } from 'store/slice/Auth';
+import { postLogin } from 'service/auth';
+import { useMutation } from 'react-query';
+import { PostLogin, Respons } from 'models';
+import { setLogin } from 'utils/sessions';
+import useToast from 'hooks/useToast';
+import useAuthStore from 'store/useAuthStore';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
+  const navigate = useNavigate()
+  const { setUser } = useAuthStore();
+  const { mutate, isLoading } = useMutation((formdata: PostLogin) => postLogin(formdata));
+  const { openToast } = useToast();
 
   const formik = useFormik({
     initialValues: {
@@ -23,13 +24,28 @@ export default function Login() {
       password: '',
     },
     validationSchema: Yup.object({
-      email: Yup.string()
-        .email('Must be a valid email')
-        .required('Email is required'),
+      email: Yup.string().email('Must be a valid email').required('Email is required'),
       password: Yup.string().min(8).required('Password is required'),
     }),
     onSubmit: async (value) => {
-
+      mutate(value, {
+        onSuccess: (res) => {
+          setLogin(res.data);
+          setUser(res.data.user);
+          openToast({
+            headMsg: `Welcome ${res.data?.user.UserInformation.fullName}`,
+            message: 'login success',
+            severity: 'success',
+          });
+          navigate('/dashboard')
+        },
+        onError: (res) => {
+          openToast({
+            severity: 'error',
+            headMsg: res as string,
+          });
+        },
+      });
     },
   });
 
@@ -57,12 +73,7 @@ export default function Login() {
         <CardContent>
           <Box>
             <Stack alignItems="center" width="100%">
-              <Box
-                component="img"
-                src={LogoBlue}
-                alt="image"
-                sx={{ height: 100, mb: 5 }}
-              />
+              <Box component="img" src={LogoBlue} alt="image" sx={{ height: 100, mb: 5 }} />
             </Stack>
             <Stack spacing={1} sx={{ mb: 3 }}>
               <Typography variant="h5">Login</Typography>
@@ -109,6 +120,7 @@ export default function Login() {
                 sx={{ mt: 3 }}
                 type="submit"
                 variant="contained"
+                disabled={isLoading}
               >
                 Submit
               </Button>
